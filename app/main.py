@@ -3,13 +3,14 @@ FastAPI Calculator Application.
 Provides REST API endpoints for calculator operations.
 """
 import logging
-from typing import Union
+from typing import Dict, Union
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.responses import Response
 from pydantic import BaseModel, Field
 
 from app.operations import (
@@ -52,7 +53,7 @@ class CalculationRequest(BaseModel):
 class CalculationResponse(BaseModel):
     result: Union[int, float] = Field(..., description="Result of the calculation")
     operation: str = Field(..., description="Operation performed")
-    operands: dict = Field(..., description="Input operands")
+    operands: Dict[str, Union[int, float]] = Field(..., description="Input operands")
 
     class Config:
         json_schema_extra = {
@@ -71,7 +72,7 @@ class ErrorResponse(BaseModel):
 
 # Root endpoint - serve calculator web interface
 @app.get("/", response_class=HTMLResponse)
-async def read_root(request: Request):
+async def read_root(request: Request) -> Response:
     """Serve the calculator web interface."""
     logger.info("Serving calculator web interface")
     return templates.TemplateResponse("calculator.html", {"request": request})
@@ -79,7 +80,7 @@ async def read_root(request: Request):
 
 # Health check endpoint
 @app.get("/health")
-async def health_check():
+async def health_check() -> Dict[str, str]:
     """Health check endpoint."""
     logger.info("Health check requested")
     return {"status": "healthy", "service": "Calculator API"}
@@ -87,7 +88,7 @@ async def health_check():
 
 # Addition endpoint
 @app.post("/add", response_model=CalculationResponse)
-async def add_numbers(request: CalculationRequest):
+async def add_numbers(request: CalculationRequest) -> CalculationResponse:
     """Add two numbers."""
     try:
         logger.info(f"Addition requested: {request.a} + {request.b}")
@@ -107,7 +108,7 @@ async def add_numbers(request: CalculationRequest):
 
 # Subtraction endpoint
 @app.post("/subtract", response_model=CalculationResponse)
-async def subtract_numbers(request: CalculationRequest):
+async def subtract_numbers(request: CalculationRequest) -> CalculationResponse:
     """Subtract two numbers."""
     try:
         logger.info(f"Subtraction requested: {request.a} - {request.b}")
@@ -127,7 +128,7 @@ async def subtract_numbers(request: CalculationRequest):
 
 # Multiplication endpoint
 @app.post("/multiply", response_model=CalculationResponse)
-async def multiply_numbers(request: CalculationRequest):
+async def multiply_numbers(request: CalculationRequest) -> CalculationResponse:
     """Multiply two numbers."""
     try:
         logger.info(f"Multiplication requested: {request.a} * {request.b}")
@@ -147,7 +148,7 @@ async def multiply_numbers(request: CalculationRequest):
 
 # Division endpoint
 @app.post("/divide", response_model=CalculationResponse)
-async def divide_numbers(request: CalculationRequest):
+async def divide_numbers(request: CalculationRequest) -> CalculationResponse:
     """Divide two numbers."""
     try:
         logger.info(f"Division requested: {request.a} / {request.b}")
@@ -167,7 +168,7 @@ async def divide_numbers(request: CalculationRequest):
 
 # Power endpoint
 @app.post("/power", response_model=CalculationResponse)
-async def power_numbers(request: CalculationRequest):
+async def power_numbers(request: CalculationRequest) -> CalculationResponse:
     """Raise a number to a power."""
     try:
         logger.info(f"Power requested: {request.a} ^ {request.b}")
@@ -185,7 +186,7 @@ async def power_numbers(request: CalculationRequest):
 
 # Modulo endpoint
 @app.post("/modulo", response_model=CalculationResponse)
-async def modulo_numbers(request: CalculationRequest):
+async def modulo_numbers(request: CalculationRequest) -> CalculationResponse:
     """Calculate modulo of two numbers."""
     try:
         logger.info(f"Modulo requested: {request.a} % {request.b}")
@@ -203,7 +204,9 @@ async def modulo_numbers(request: CalculationRequest):
 
 # Exception handlers
 @app.exception_handler(CalculatorError)
-async def calculator_exception_handler(request: Request, exc: CalculatorError):
+async def calculator_exception_handler(
+    request: Request, exc: CalculatorError
+) -> HTTPException:
     """Handle calculator-specific exceptions."""
     logger.error(f"Calculator error: {exc}")
     return HTTPException(status_code=400, detail=str(exc))
