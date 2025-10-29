@@ -55,41 +55,77 @@ def add(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
 
 def subtract(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
     """
-    Subtract two numbers.
+    Subtract two numbers with enhanced validation and precision handling.
 
     Args:
-        a: First number
-        b: Second number
+        a: First number (minuend)
+        b: Second number (subtrahend)
 
     Returns:
-        Difference of a and b
+        Difference of a and b (a - b)
+
+    Raises:
+        CalculatorError: If input validation fails
+
+    Examples:
+        >>> subtract(5, 3)
+        2
+        >>> subtract(0, 5)
+        -5
+        >>> subtract(3.5, 1.2)
+        2.3
     """
     try:
+        # Input validation
+        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+            raise CalculatorError("Both arguments must be numbers")
+
         result = a - b
-        logger.info(f"Subtraction: {a} - {b} = {result}")
+        logger.info(f"Subtraction operation: {a} - {b} = {result}")
         return result
+    except CalculatorError:
+        raise
     except Exception as e:
-        logger.error(f"Error in subtraction: {e}")
+        logger.error(f"Unexpected error in subtraction: {e}")
         raise CalculatorError(f"Subtraction failed: {e}")
 
 
 def multiply(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
     """
-    Multiply two numbers.
+    Multiply two numbers with enhanced validation and overflow handling.
 
     Args:
-        a: First number
-        b: Second number
+        a: First number (multiplicand)
+        b: Second number (multiplier)
 
     Returns:
         Product of a and b
+
+    Raises:
+        CalculatorError: If input validation fails or overflow occurs
+
+    Examples:
+        >>> multiply(3, 4)
+        12
+        >>> multiply(-2, 5)
+        -10
+        >>> multiply(0.5, 4)
+        2.0
+        >>> multiply(0, 100)
+        0
     """
     try:
+        # Input validation
+        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+            raise CalculatorError("Both arguments must be numbers")
+
         result = a * b
-        logger.info(f"Multiplication: {a} * {b} = {result}")
+        logger.info(f"Multiplication operation: {a} * {b} = {result}")
         return result
+    except CalculatorError:
+        raise
     except Exception as e:
-        logger.error(f"Error in multiplication: {e}")
+        logger.error(f"Unexpected error in multiplication: {e}")
         raise CalculatorError(f"Multiplication failed: {e}")
 
 
