@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>FastAPI Calculator</h1>
+        <div class="calculator">
+            <div class="display">
+                <input type="text" id="display" readonly placeholder="0">
+            </div>
+            
+            <div class="buttons">
+                <button class="btn clear" onclick="clearDisplay()">C</button>
+                <button class="btn operator" onclick="appendToDisplay('/')" data-operation="divide">÷</button>
+                <button class="btn operator" onclick="appendToDisplay('*')" data-operation="multiply">×</button>
+                <button class="btn operator" onclick="appendToDisplay('%')" data-operation="modulo">%</button>
+                
+                <button class="btn number" onclick="appendToDisplay('7')">7</button>
+                <button class="btn number" onclick="appendToDisplay('8')">8</button>
+                <button class="btn number" onclick="appendToDisplay('9')">9</button>
+                <button class="btn operator" onclick="appendToDisplay('-')" data-operation="subtract">-</button>
+                
+                <button class="btn number" onclick="appendToDisplay('4')">4</button>
+                <button class="btn number" onclick="appendToDisplay('5')">5</button>
+                <button class="btn number" onclick="appendToDisplay('6')">6</button>
+                <button class="btn operator" onclick="appendToDisplay('+')" data-operation="add">+</button>
+                
+                <button class="btn number" onclick="appendToDisplay('1')">1</button>
+                <button class="btn number" onclick="appendToDisplay('2')">2</button>
+                <button class="btn number" onclick="appendToDisplay('3')">3</button>
+                <button class="btn operator" onclick="appendToDisplay('^')" data-operation="power">^</button>
+                
+                <button class="btn number zero" onclick="appendToDisplay('0')">0</button>
+                <button class="btn decimal" onclick="appendToDisplay('.')">.</button>
+                <button class="btn equals" onclick="calculate()">=</button>
+            </div>
+        </div>
+        
+        <div class="result-section">
+            <h3>Result:</h3>
+            <div id="result" class="result-display">Ready for calculation</div>
+        </div>
+        
+        <div class="api-info">
+            <h3>API Endpoints:</h3>
+            <ul>
+                <li><strong>POST /add</strong> - Addition</li>
+                <li><strong>POST /subtract</strong> - Subtraction</li>
+                <li><strong>POST /multiply</strong> - Multiplication</li>
+                <li><strong>POST /divide</strong> - Division</li>
+                <li><strong>POST /power</strong> - Power</li>
+                <li><strong>POST /modulo</strong> - Modulo</li>
+                <li><strong>GET /docs</strong> - API Documentation</li>
+                <li><strong>GET /health</strong> - Health Check</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', path='/script.js') }}"></script>
+</body>
+</html>
