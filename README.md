@@ -2,6 +2,8 @@
 
 A comprehensive FastAPI-based calculator application with unit, integration, and end-to-end testing, complete with CI/CD pipeline and web interface.
 
+**Last GitHub Actions Demo:** October 28, 2025
+
 ![FastAPI Calculator](https://img.shields.io/badge/FastAPI-Calculator-blue)
 ![Python](https://img.shields.io/badge/Python-3.11+-blue)
 ![Tests](https://img.shields.io/badge/Tests-Unit%20%7C%20Integration%20%7C%20E2E-green)
