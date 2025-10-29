@@ -221,28 +221,45 @@ def power(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
 
 def modulo(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
     """
-    Calculate modulo of two numbers.
+    Calculate modulo (remainder) of two numbers with comprehensive validation.
 
     Args:
-        a: First number
-        b: Second number
+        a: First number (dividend)
+        b: Second number (divisor)
 
     Returns:
-        Modulo of a and b
+        Modulo of a and b (remainder when a is divided by b)
 
     Raises:
-        CalculatorError: If modulo by zero is attempted
+        CalculatorError: If modulo by zero is attempted or input validation fails
+
+    Examples:
+        >>> modulo(10, 3)
+        1
+        >>> modulo(15, 4)
+        3
+        >>> modulo(7, 7)
+        0
+        >>> modulo(-10, 3)
+        2
+        >>> modulo(5.5, 2)
+        1.5
     """
     try:
+        # Input validation
+        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+            raise CalculatorError("Both arguments must be numbers")
+
+        # Modulo by zero check
         if b == 0:
             logger.error("Modulo by zero attempted")
             raise CalculatorError("Modulo by zero is not allowed")
 
         result = a % b
-        logger.info(f"Modulo: {a} % {b} = {result}")
+        logger.info(f"Modulo operation: {a} % {b} = {result}")
         return result
     except CalculatorError:
         raise
     except Exception as e:
-        logger.error(f"Error in modulo operation: {e}")
+        logger.error(f"Unexpected error in modulo operation: {e}")
         raise CalculatorError(f"Modulo operation failed: {e}")
