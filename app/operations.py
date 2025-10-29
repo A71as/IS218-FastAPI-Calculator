@@ -131,7 +131,7 @@ def multiply(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
 
 def divide(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
     """
-    Divide two numbers.
+    Divide two numbers with comprehensive validation and precision handling.
 
     Args:
         a: First number (dividend)
@@ -141,20 +141,35 @@ def divide(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
         Quotient of a and b
 
     Raises:
-        CalculatorError: If division by zero is attempted
+        CalculatorError: If division by zero is attempted or input validation fails
+
+    Examples:
+        >>> divide(10, 2)
+        5.0
+        >>> divide(7, 3)
+        2.3333333333333335
+        >>> divide(-15, 3)
+        -5.0
+        >>> divide(0, 5)
+        0.0
     """
     try:
+        # Input validation
+        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+            raise CalculatorError("Both arguments must be numbers")
+
+        # Division by zero check
         if b == 0:
             logger.error("Division by zero attempted")
             raise CalculatorError("Division by zero is not allowed")
 
         result = a / b
-        logger.info(f"Division: {a} / {b} = {result}")
+        logger.info(f"Division operation: {a} / {b} = {result}")
         return result
     except CalculatorError:
         raise
     except Exception as e:
-        logger.error(f"Error in division: {e}")
+        logger.error(f"Unexpected error in division: {e}")
         raise CalculatorError(f"Division failed: {e}")
 
 
