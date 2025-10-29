@@ -175,7 +175,7 @@ def divide(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
 
 def power(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
     """
-    Raise a number to a power.
+    Raise a number to a power with validation and overflow protection.
 
     Args:
         a: Base number
@@ -183,13 +183,39 @@ def power(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
 
     Returns:
         a raised to the power of b
+
+    Raises:
+        CalculatorError: If input validation fails or overflow occurs
+
+    Examples:
+        >>> power(2, 3)
+        8
+        >>> power(5, 0)
+        1
+        >>> power(4, 0.5)
+        2.0
+        >>> power(-2, 3)
+        -8
+        >>> power(10, -2)
+        0.01
     """
     try:
+        # Input validation
+        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+            raise CalculatorError("Both arguments must be numbers")
+
+        # Check for potential overflow with large exponents
+        if isinstance(b, int) and abs(b) > 1000:
+            logger.warning(f"Large exponent detected: {b}")
+            raise CalculatorError("Exponent too large, potential overflow")
+
         result = a**b
-        logger.info(f"Power: {a} ^ {b} = {result}")
+        logger.info(f"Power operation: {a} ^ {b} = {result}")
         return result
+    except CalculatorError:
+        raise
     except Exception as e:
-        logger.error(f"Error in power operation: {e}")
+        logger.error(f"Unexpected error in power operation: {e}")
         raise CalculatorError(f"Power operation failed: {e}")
 
 
